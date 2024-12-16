@@ -73,8 +73,7 @@ public class ChannelPanel extends JPanel {
     }
 
     private void addChannels(){ //chatpanel,memberpanel,infopanel
-        String currentDirectory = System.getProperty("user.dir");
-        System.out.println("현재 디렉토리: " + currentDirectory);
+
         String projectDir = System.getProperty("user.dir");
         // 상대 경로를 합쳐서 최종 경로 만들기
         String path = projectDir + "/resources/channel";
