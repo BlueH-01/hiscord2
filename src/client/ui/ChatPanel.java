@@ -18,7 +18,7 @@ public class ChatPanel extends JPanel {
     // 이모티콘 코드와 이미지 경로 매핑
     private Map<String, String> emojiMap;
 
-    public ChatPanel(PrintWriter out) {
+    public ChatPanel(String channelName,PrintWriter out) { //chats.txt에서 내용 불러오기
         setLayout(new BorderLayout());
         setBackground(new Color(47, 49, 54));
 

@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class RightPanel extends JPanel {
 
-    public RightPanel() {
+    public RightPanel(String channelName) {
         setLayout(new BorderLayout());
         setBackground(new Color(47, 49, 54));
         setPreferredSize(new Dimension(200, 0)); // 오른쪽 패널의 너비 설정

@@ -4,49 +4,35 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.Socket;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainFrame extends JFrame {
+    private CardLayout cardLayout; // 카드 레이아웃
+    private JPanel cardPanel;      // 카드 패널
+    private List<ChannelPanel> channelPanelList;
+
     public MainFrame(String username) {
         setTitle("Chat - " + username);
         setSize(1200, 1000);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        cardLayout = new CardLayout();
+        cardPanel = new JPanel(cardLayout);
+        channelPanelList = new ArrayList<>();
+
         try {
             Socket socket = new Socket("localhost", 12345);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
+            // 채널 목록 패널에 카드 레이아웃과 패널 전달
+            ChannelListPanel channelListPanel = new ChannelListPanel(in,out, cardPanel, cardLayout);
+            add(channelListPanel, BorderLayout.WEST);
 
+            add(cardPanel, BorderLayout.CENTER);
 
-            ChannelPanel channelPanel = new ChannelPanel(out);
-            add(channelPanel, BorderLayout.WEST);
-
-            // 채팅 패널 및 채널 패널 추가
-            ChatPanel chatPanel = new ChatPanel(out);
-            add(chatPanel, BorderLayout.CENTER);
-
-             //접속 중인 멤버 패널 추가
-             RightPanel rightPanel = new RightPanel();
-             add(rightPanel, BorderLayout.EAST);
-
-            new Thread(() -> {
-                try {
-                    String message;
-                    while ((message = in.readLine()) != null) {
-                        if (message.startsWith("/members")) {
-                            // 멤버 리스트 업데이트 메시지 처리
-                            //String[] members = message.substring(9).split(",");
-                            //rightPanel.updateMembers(Arrays.asList(members));
-                        } else {
-                            chatPanel.appendMessage(message);
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
             out.println(username);
         } catch (IOException e) {
             e.printStackTrace();
